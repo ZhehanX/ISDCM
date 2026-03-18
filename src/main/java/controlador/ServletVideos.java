@@ -24,7 +24,9 @@ public class ServletVideos extends HttpServlet {
         String titulo = request.getParameter("titulo");
         String autor = request.getParameter("autor");
         String fecha = request.getParameter("fecha");
-        String duracionStr = request.getParameter("duracion en minutos");
+        String horasStr = request.getParameter("duracion_horas");
+        String minutosStr = request.getParameter("duracion_minutos");
+        String segundosStr = request.getParameter("duracion_segundos");
         String descripcion = request.getParameter("descripcion");
         String formato = request.getParameter("formato");
 
@@ -34,7 +36,9 @@ public class ServletVideos extends HttpServlet {
         if (titulo == null ||
             autor == null ||
             fecha == null ||
-            duracionStr == null ||
+            horasStr == null ||
+            minutosStr == null ||
+            segundosStr == null ||
             descripcion == null ||
             formato == null ) {
 
@@ -45,15 +49,19 @@ public class ServletVideos extends HttpServlet {
             return;
         }
 
-        int duracion;
+        int horas, minutos, segundos;
         try {
-            duracion = Integer.parseInt(duracionStr);
+            horas = Integer.parseInt(horasStr);
+            minutos = Integer.parseInt(minutosStr);
+            segundos = Integer.parseInt(segundosStr);
         } catch (NumberFormatException e) {
-            request.setAttribute("mensaje", "La duración debe ser un número válido");
+            request.setAttribute("mensaje", "La duración debe contener números válidos");
             RequestDispatcher rd = request.getRequestDispatcher("/vista/resultado.jsp");
             rd.forward(request, response);
             return;
         }
+
+        String duracion = String.format("%02d:%02d:%02d", horas, minutos, segundos);
 
         boolean ok = Video.registrar(
                 titulo, autor, fecha, duracion, descripcion, formato);

@@ -18,8 +18,10 @@
     Fecha:
     <input type="date" name="fecha" required><br>
 
-    Duracion:
-    <input type="number" name="duracion en minutos" min="1" required><br>
+    Duracion:<br>
+    Horas: <input type="number" name="duracion_horas" min="0" max="99" value="0" required>
+    Minutos: <input type="number" name="duracion_minutos" min="0" max="59" value="0" required>
+    Segundos: <input type="number" name="duracion_segundos" min="0" max="59" value="0" required><br>
 
     Descripcion:
     <input type="text" name="descripcion" required><br>

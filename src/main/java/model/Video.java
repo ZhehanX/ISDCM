@@ -9,7 +9,7 @@ public class Video {
             String titulo,
             String autor,
             String fecha,
-            int duracion,
+            String duracion,
             String descripcion,
             String formato) {
 
@@ -31,7 +31,7 @@ public class Video {
             ps.setString(1, titulo);
             ps.setString(2, autor);
             ps.setDate(3, Date.valueOf(fecha));
-            ps.setInt(4, duracion);
+            ps.setString(4, duracion);
             ps.setInt(5, 0);
             ps.setString(6, descripcion);
             ps.setString(7, formato);
