@@ -1,0 +1,24 @@
+# IDE
+.idea/
+*.iml
+
+# Build output
+target/
+
+# macOS
+.DS_Store
+
+# Maven wrapper (optional, usually not tracked)
+# .mvn/
+
+# Logs
+derby.log
+
+# Compiled classes
+*.class
+
+# Archives
+*.war
+*.jar
+*.zip
+_lab2_backup

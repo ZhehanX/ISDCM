@@ -14,6 +14,9 @@ public class ServletVideos extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("usuario") == null) {
@@ -79,6 +82,9 @@ public class ServletVideos extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("usuario") == null) {
@@ -86,11 +92,6 @@ public class ServletVideos extends HttpServlet {
             return;
         }
 
-        ArrayList<String[]> lista = Video.listar();
-
-        request.setAttribute("videos", lista);
-
-        RequestDispatcher rd = request.getRequestDispatcher("/vista/listaVideos.jsp");
-        rd.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/servletREST?action=search");
     }
 }

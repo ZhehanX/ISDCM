@@ -13,6 +13,9 @@ public class ServletUsuarios extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String accion = request.getParameter("accion");
 
         if ("registro".equals(accion)) {
