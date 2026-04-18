@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="LAB2">
+    <output-path>$PROJECT_DIR$/target/LAB2-1.0-SNAPSHOT</output-path>
+    <root id="root" />
+  </artifact>
+</component>
