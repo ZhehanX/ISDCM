@@ -70,6 +70,21 @@ public class VideoDAO {
         return false;
     }
 
+    public boolean update(Video video) {
+        String sql = "UPDATE videos SET titulo = ?, autor = ?, descripcion = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, video.getTitulo());
+            ps.setString(2, video.getAutor());
+            ps.setString(3, video.getDescripcion());
+            ps.setInt(4, video.getId());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public Video findById(int id) {
         String sql = "SELECT * FROM videos WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

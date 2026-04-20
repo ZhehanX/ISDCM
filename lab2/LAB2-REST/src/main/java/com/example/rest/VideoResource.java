@@ -25,6 +25,18 @@ public class VideoResource {
         return Response.ok(videos).build();
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getVideoById(@PathParam("id") int id) {
+        Video video = videoDAO.findById(id);
+        if (video != null) {
+            return Response.ok(video).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
     @POST
     @Path("/{id}/play")
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,13 +54,10 @@ public class VideoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateVideo(@PathParam("id") int id, Video video) {
-        // This is mainly to satisfy the PUT requirement in the rubric.
-        // In a real app, we would update the video record in the DB.
-        // For now, let's just return 200 OK if the video exists.
-        Video existing = videoDAO.findById(id);
-        if (existing != null) {
-            // Logic to update fields could go here
-            return Response.ok(existing).build();
+        video.setId(id);
+        boolean updated = videoDAO.update(video);
+        if (updated) {
+            return Response.ok(video).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

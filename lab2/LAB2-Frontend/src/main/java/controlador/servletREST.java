@@ -31,6 +31,10 @@ public class servletREST extends HttpServlet {
             handleSearch(request, response);
         } else if ("play".equals(action)) {
             handlePlay(request, response);
+        } else if ("edit".equals(action)) {
+            handleEdit(request, response);
+        } else if ("update".equals(action)) {
+            handleUpdate(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no válida");
         }
@@ -95,6 +99,59 @@ public class servletREST extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/vista/reproduccion.jsp?id=" + id);
             } else {
                 response.sendError(apiResponse.statusCode(), "Error al registrar reproducción");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException(e);
+        }
+    }
+
+    private void handleEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        HttpRequest apiRequest = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id))
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> apiResponse = httpClient.send(apiRequest, HttpResponse.BodyHandlers.ofString());
+            if (apiResponse.statusCode() == 200) {
+                Video video = jsonb.fromJson(apiResponse.body(), Video.class);
+                request.setAttribute("video", video);
+                request.getRequestDispatcher("/vista/editarVid.jsp").forward(request, response);
+            } else {
+                response.sendError(apiResponse.statusCode(), "Video no encontrado");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException(e);
+        }
+    }
+
+    private void handleUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Video video = new Video();
+        video.setId(Integer.parseInt(id));
+        video.setTitulo(request.getParameter("titulo"));
+        video.setAutor(request.getParameter("autor"));
+        video.setDescripcion(request.getParameter("descripcion"));
+
+        String json = jsonb.toJson(video);
+
+        HttpRequest apiRequest = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        try {
+            HttpResponse<String> apiResponse = httpClient.send(apiRequest, HttpResponse.BodyHandlers.ofString());
+            if (apiResponse.statusCode() == 200) {
+                request.setAttribute("mensaje", "Vídeo actualizado correctamente");
+                request.getRequestDispatcher("/vista/resultado.jsp").forward(request, response);
+            } else {
+                request.setAttribute("mensaje", "Error al actualizar el vídeo: " + apiResponse.statusCode());
+                request.getRequestDispatcher("/vista/resultado.jsp").forward(request, response);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
